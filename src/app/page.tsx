@@ -7,6 +7,9 @@ const page = () => {
   const [scoreValue,setScoreValue] = useState(0);
   const [isGameOver,setIsGameOver] = useState(false);
   const [message,setMessage] = useState('');
+  const [count,setCount] = useState(1);
+  const [isWinner,setIsWinner] = useState(false);
+  const [isGameCompleted,setIsGameCompleted] = useState(false);
   const timerRef=useRef<NodeJS.Timeout | number>(0);
 
   // Generate random numbers once on mount
@@ -21,6 +24,7 @@ const page = () => {
       if(prev<=1){
         clearInterval(timerRef.current);
         setIsGameOver(true);
+        setIsWinner(false);
         setMessage("Oops you lose");
         return 0;
       }
@@ -33,26 +37,50 @@ const page = () => {
   const handleScore = (e:React.MouseEvent,num:number) => {
     if(num=== hitValue){
       setScoreValue(prev=>prev+10);
-    if(scoreValue===90){
+    if(count ===1 && scoreValue>=90){
       setIsGameOver(true);
-      setMessage("Congrats you won")
+      setIsWinner(true);
+      setMessage(`Congrats you have completed Level ${count}`);
+      clearInterval(timerRef.current);
     }
-   
-
+    if(count ===2 && scoreValue>=140){
+      setIsGameOver(true);
+      setIsWinner(true);
+      setMessage(`Congrats you have completed Level ${count}`);
+      clearInterval(timerRef.current);
+    }
+    if(count ===3 && scoreValue>=190){
+      setIsGameOver(true);
+      setIsWinner(true);
+      setMessage(`Congrats you have completed Level ${count}`);
+      clearInterval(timerRef.current);
+    }
+    if(count ===4 && scoreValue>=240){
+      setIsGameOver(true);
+      setIsWinner(true);
+      setMessage(`Congrats you have completed Level ${count}`);
+      clearInterval(timerRef.current);
+    }
+    if(count ===5 && scoreValue>=290){
+      setIsGameOver(true);
+      setIsWinner(true);
+      setMessage(`Congrats you have completed Level ${count}`);
+      clearInterval(timerRef.current);
+    }
     
       // Generate new hit value
       setHitValue(Math.floor(Math.random()*10+1));
     }
   }
 
-
-
   // New Game
-  const newGame = () => {
+  const nextLevel = () => {
     setIsGameOver(false);
     setScoreValue(0);
-    setTimer(60);
+    setTimer(59);
     handleTimer();
+    if(isWinner)
+      setCount(prev=>prev+1);
   }
 
   // Initialize game
@@ -72,17 +100,18 @@ const page = () => {
      
       {isGameOver?(
               <div className=' flex flex-col items-center space-y-5 '>
-              <h1 className='text-3xl font-bold'>Game Over! Final Score: {scoreValue}</h1>
-              <h2 className={`${scoreValue===100?'text-green-500':'text-red-500'} text-2xl rounded-lg p-2`}>{message}</h2>
-              <p className='text-xl'>Click on New Game Button to Play Again</p>
+              <h1 className='text-xl md:text-3xl font-bold'>Game Over! Final Score: {scoreValue}</h1>
+              <h2 className={`${isWinner?'text-green-500':'text-red-500'} md:text-2xl rounded-lg p-2`}>{message}</h2>
+              <p className='md:text-xl'>{`Click on ${isWinner ?'Next Level':'New Game'} Button to ${isWinner?'go to Next Level':'Play Again'}`}</p>
               <button
-              onClick={newGame}
-              className='bg-violet-600 text-xl hover:bg-violet-700 p-2 rounded-md  cursor-pointer'>New Game</button>
+              onClick={nextLevel}
+              className='bg-violet-600 md:text-xl hover:bg-violet-700 p-2 rounded-md  cursor-pointer'>{isWinner?'Next Level':'New Game'}</button>
         </div>
       ):(
-        <div className='flex flex-col items-center my-5 justify-center'>
-            <h1 className='text-3xl font-bold  mb-5'>Bubble Game</h1>
-           <div className='space-x-10 text-xl mb-5'>
+        <div className='flex flex-col items-center my-5 space-y-2 justify-center'>
+            <h1 className='text-3xl font-bold'>Bubble Game</h1>
+            <h2 className='text-xl'>Level {count}</h2>
+           <div className='space-x-10 text-xl'>
       <span>{`Hit: ${hitValue}`}</span>
       <span>{`Timer: ${timer}`}</span>
       <span>{`Score : ${scoreValue}`}</span>

@@ -9,7 +9,7 @@ const page = () => {
   const [message,setMessage] = useState('');
   const [count,setCount] = useState(1);
   const [isWinner,setIsWinner] = useState(false);
-  const [isGameCompleted,setIsGameCompleted] = useState(false);
+  const [winScore,setWinScore] = useState(100);
   const timerRef=useRef<NodeJS.Timeout | number>(0);
 
   // Generate random numbers once on mount
@@ -25,7 +25,7 @@ const page = () => {
         clearInterval(timerRef.current);
         setIsGameOver(true);
         setIsWinner(false);
-        setMessage("Oops you lose");
+        setMessage("Oops Game Over");
         return 0;
       }
       return prev-1;
@@ -79,8 +79,10 @@ const page = () => {
     setScoreValue(0);
     setTimer(59);
     handleTimer();
-    if(isWinner)
+    if(isWinner){
       setCount(prev=>prev+1);
+    setWinScore(prev=>prev+50);
+    }
   }
 
   // Initialize game
@@ -100,8 +102,8 @@ const page = () => {
      
       {isGameOver?(
               <div className=' flex flex-col items-center space-y-5 '>
-              <h1 className='text-xl md:text-3xl font-bold'>Game Over! Final Score: {scoreValue}</h1>
-              <h2 className={`${isWinner?'text-green-500':'text-red-500'} md:text-2xl rounded-lg p-2`}>{message}</h2>
+              <h1 className='text-2xl md:text-3xl font-bold'>Game Over! Final Score: {scoreValue}</h1>
+              <h2 className={`${isWinner?'text-green-500':'text-red-500'} text-xl md:text-2xl rounded-lg p-2`}>{message}</h2>
               <p className='md:text-xl'>{`Click on ${isWinner ?'Next Level':'New Game'} Button to ${isWinner?'go to Next Level':'Play Again'}`}</p>
               <button
               onClick={nextLevel}
@@ -111,10 +113,11 @@ const page = () => {
         <div className='flex flex-col items-center my-5 space-y-2 justify-center'>
             <h1 className='text-3xl font-bold'>Bubble Game</h1>
             <h2 className='text-xl'>Level {count}</h2>
-           <div className='space-x-10 text-xl'>
+           <div className=' space-x-3 md:space-x-10 text-xl'>
       <span>{`Hit: ${hitValue}`}</span>
       <span>{`Timer: ${timer}`}</span>
       <span>{`Score : ${scoreValue}`}</span>
+      <span>{`WinScore: ${winScore}`}</span>
       </div>
       <div
         className='flex  flex-wrap w-[80%] h-[80%]  rounded-2xl'>

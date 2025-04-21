@@ -25,7 +25,7 @@ const page = () => {
         clearInterval(timerRef.current);
         setIsGameOver(true);
         setIsWinner(false);
-        setMessage("Oops Game Over");
+        setMessage("Oops you lose");
         return 0;
       }
       return prev-1;
